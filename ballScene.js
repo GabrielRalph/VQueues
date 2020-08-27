@@ -181,6 +181,7 @@ class BallBox{
   createBall(options){
     let ball = new Ball(this, options);
     this.balls.push(ball)
+    return ball
   }
 
   removeBall(ball){

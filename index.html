@@ -19,7 +19,8 @@
 
     let testScene = new Levels()
     let ballbox = new BallBox('svg')
-    ballbox.createBall({a: new Vector(0, 600), pos: new Vector(500, 500), style: {strokeWidth: 5}, r: 50})
+    let ball = ballbox.createBall({a: new Vector(0, 600), pos: new Vector(500, 500), style: {strokeWidth: 5}, r: 50})
+    ball.style = {fill: '#a363b3', stroke: "#5cad6e"}
     ballbox.createBall({a: new Vector(0, 600), pos: new Vector(450, 600), style: {strokeWidth: 5}, r: 50})
     ballbox.createBall({a: new Vector(0, 600), pos: new Vector(400, 700), style: {strokeWidth: 5}, r: 50})
     ballbox.createBall({a: new Vector(0, 600), pos: new Vector(350, 600), style: {strokeWidth: 5}, r: 50})
