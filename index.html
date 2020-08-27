@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Visuals</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="Visuals" content="Visualize something">
+
+  <script src = "https://emb.galetora.com/vector.js" type="text/javascript"></script>
+  <script src = "https://emb.galetora.com/svgPlus.js" type="text/javascript"></script>
+  <script src = "./visuals.js" type="text/javascript"></script>
+  <script src = "./ballScene.js" type="text/javascript"></script>
+  <body>
+    <svg viewBox = "0 0 1000 1000" id = "svg"></svg>
+  </body>
+  <script type = "text/javascript">
+    let vQueue = new VQueue()
+
+    let testScene = new Levels()
+    let ballbox = new BallBox('svg')
+    ballbox.createBall({a: new Vector(0, 600), pos: new Vector(500, 500), style: {strokeWidth: 5}, r: 50})
+    ballbox.createBall({a: new Vector(0, 600), pos: new Vector(450, 600), style: {strokeWidth: 5}, r: 50})
+    ballbox.createBall({a: new Vector(0, 600), pos: new Vector(400, 700), style: {strokeWidth: 5}, r: 50})
+    ballbox.createBall({a: new Vector(0, 600), pos: new Vector(350, 600), style: {strokeWidth: 5}, r: 50})
+    ballbox.createBall({a: new Vector(0, 600), pos: new Vector(250, 500), style: {strokeWidth: 5}, r: 50})
+
+    vQueue.appendVScene(ballbox);
+    vQueue.appendVScene(testScene);
+  </script>
+  <style type = "text/css">
+  body{margin: 0;}
+    .bass, .snare{
+      min-width: 50px;
+      float: left;
+      margin: 0px;
+    }
+    .bass { background: red;}
+    .snare { background: blue;}
+
+    #svg{
+      position: fixed;
+      top: 0;
+      left: 100px;
+      background: grey;
+      max-height: 100vh;
+      max-width: calc(100vw - 100px);
+    }
+  </style>
+
+</html>
