@@ -41,10 +41,10 @@ class Ball{
   bounce(val){
     if(!this.bouncing){
       if (this.pos.y > 500){
-        this._v.y = -0.05*val*this.a.y
+        this._v.y = -0.1*val*this.a.y
       }
       this.bouncing = true;
-      setTimeout(()=>{this.bouncing = false}, 250)
+      setTimeout(()=>{this.bouncing = false}, 100)
     }
   }
 
@@ -229,10 +229,10 @@ class BallBox{
     let n1 = v_b.cd
     let n2 = v_a.cd
 
-    ball_a.v = (ball_a.v.add(cd.mul(v_b.cd - v_a.cd)))
-    ball_b.v = (ball_b.v.add(cd.mul(v_a.cd - v_b.cd)))
+    ball_a.v = (ball_a.v.add(cd.mul(v_b.cd - v_a.cd))).mul(0.9)
+    ball_b.v = (ball_b.v.add(cd.mul(v_a.cd - v_b.cd))).mul(0.9)
 
-    ball_b.pos = ball_a.pos.add(cd.mul(ball_a.r + ball_b.r + 0.001))
+    ball_b.pos = ball_a.pos.add(cd.mul(ball_a.r + ball_b.r + 0.001));
   }
   //Brute force O(n^2)
   resolveCollisions(){
@@ -248,13 +248,22 @@ class BallBox{
   }
 
   onBass(std){
+    let mode = 'no'
     if (std > 10){
-      for (var i = 0; i < 5; i++){
-        if(this.balls[this.currentBall]){
-          this.balls[this.currentBall].bounce(std/3)
-          this.currentBall ++;
-          if (this.currentBall >= this.balls.length){
-            this.currentBall = 0;
+      if (mode == 'all'){
+
+        this.balls.forEach((ball) => {
+          ball.bounce(std)
+        });
+      }else{
+
+        for (var i = 0; i < 5; i++){
+          if(this.balls[this.currentBall]){
+            this.balls[this.currentBall].bounce(std/3)
+            this.currentBall ++;
+            if (this.currentBall >= this.balls.length){
+              this.currentBall = 0;
+            }
           }
         }
       }
