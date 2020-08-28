@@ -6,11 +6,14 @@ class VQueue{
         this.handleStream(stream)
       });
     }
-    this.bass_specs = [60, 100];
+    this.bass_specs = [60, 150];
     this.snare_specs = [2000, 3000];
     this.vScenes = [];
 
-    this.bass_buffer = []
+    this.last_bass = 0;
+    this.last_bass_dir = 0;
+    this.last_snare = 0;
+    this.last_snare_dir = 0;
 
     let next_frame = (tmsp) => {
       this.onFrame();
@@ -68,23 +71,14 @@ class VQueue{
     std *= 10000
 
 
-    let isBeat = true;
-    this.bass_buffer.forEach((b) => {
-      isBeat &= std > b
-    });
-
-    if (isBeat){
+    let dir = std > this.last_bass;
+    this.last_bass = std;
+    if (!dir && this.last_bass_dir){
       this._runVSceneMethod('onBass', std)
     }else{
-      this._runVSceneMethod('onBass', std)
+      // this._runVSceneMethod('onBass', std)
     }
-
-    if (this.bass_buffer.length < 3){
-      this.bass_buffer.push(std)
-    }else{
-      this.bass_buffer.push(std)
-      this.bass_buffer.shift()
-    }
+    this.last_bass_dir = dir;
   }
 
   getSnare(){
@@ -99,7 +93,14 @@ class VQueue{
     std = Math.sqrt(std)/n;
     std *= 10000
 
-    this._runVSceneMethod('onSnare', std)
+    let dir = std > this.last_snare;
+    this.last_snare = std;
+    if (!dir && this.last_snare_dir){
+      this._runVSceneMethod('onSnare', std)
+    }else{
+      // this._runVSceneMethod('onBass', std)
+    }
+    this.last_snare_dir = dir;
   }
 
   onFrame(){

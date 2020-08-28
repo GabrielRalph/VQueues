@@ -1,16 +1,3 @@
-class BallScene{
-  constructor(){
-
-  }
-
-  onbass(){
-    setAllBallsVelocit(up)
-  }
-  ontrebble(){
-    changeAllBallsColors()
-  }
-}
-
 class Ball{
   constructor(ballBox, options = null){
 
@@ -28,6 +15,8 @@ class Ball{
     this.r = 2;// relative
     this.g = 9.81
 
+    this.bouncing = false;
+
     if (options instanceof Object){
       for (var key in options){
         if (this[key]){
@@ -37,8 +26,26 @@ class Ball{
     }
   }
 
+  rainbow(){
+    let h = Math.round(360*Math.random());
+    let s = 100;
+    let l = 50;
+
+    console.log();
+    this.style = {
+      fill: `hsl(${h}, ${s}%, ${l}%)`,
+      stroke: `hsl(${h}, ${s}%, ${l - 20}%)`
+    }
+  }
+
   bounce(val){
-    this._v.y = -0.1*val*this.a.y
+    if(!this.bouncing){
+      if (this.pos.y > 500){
+        this._v.y = -0.05*val*this.a.y
+      }
+      this.bouncing = true;
+      setTimeout(()=>{this.bouncing = false}, 250)
+    }
   }
 
   set fill(val){
@@ -115,6 +122,12 @@ class Ball{
   get pos(){
     return this._pos
   }
+  set x(val){
+    this._pos.x = val;
+  }
+  set y(val){
+    this._pos.y = val;
+  }
 
   set a(a_v){
     if ( a_v instanceof Vector ){
@@ -157,21 +170,33 @@ class Ball{
     let fVel = this.v.add(this.a.mul(dt))
     let fPos = this.pos.add(fVel.mul(dt));
     if ((fPos.x + this.r > box.xMax) || (fPos.x - this.r < box.xMin)){
+      this.x = (fPos.x + this.r > box.xMax) ?
+                box.xMax - this.r
+              : box.xMin + this.r
       this.v_x_flip = res.x;
     }
     if ((fPos.y + this.r > box.yMax) || (fPos.y - this.r < box.yMin)){
+      this.y = (fPos.y + this.r > box.yMax) ?
+                box.yMax - this.r
+              : box.yMin + this.r
       this.v_y_flip = res.y;
     }
+
   }
 }
 
 class BallBox{
   constructor(el){
     this.el = parseElement(el)
-    let vb = this.el.getViewBox();
-    let min = vb.offset;
-    let max = min.add(vb.size);
-    this.screenConstraints = {xMin: min.x, yMin: min.y, xMax: max.x, yMax: max.y}
+    window.onresize = () => {
+      this.el.setProps({viewBox: `0 0 ${window.innerWidth}, ${window.innerHeight}`})
+      let vb = this.el.getViewBox();
+      let min = vb.offset;
+      let max = min.add(vb.size);
+      this.screenConstraints = {xMin: min.x, yMin: min.y, xMax: max.x, yMax: max.y}
+    }
+    this.screenConstraints = {}
+    window.onresize()
     this.boxEdgeRestitution = new Vector(0.99, 0.9);
     this.balls = []
     this.last_tmsp = null
@@ -224,9 +249,22 @@ class BallBox{
 
   onBass(std){
     if (std > 10){
+      for (var i = 0; i < 5; i++){
+        if(this.balls[this.currentBall]){
+          this.balls[this.currentBall].bounce(std/3)
+          this.currentBall ++;
+          if (this.currentBall >= this.balls.length){
+            this.currentBall = 0;
+          }
+        }
+      }
+    }
+  }
+
+  onSnare(std){
+    if (std > 7){
       if(this.balls[this.currentBall]){
-        console.log(std);
-        this.balls[this.currentBall].bounce(std/3)
+        this.balls[this.currentBall].rainbow()
         this.currentBall ++;
         if (this.currentBall >= this.balls.length){
           this.currentBall = 0;
