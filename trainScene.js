@@ -2,6 +2,8 @@ class BallPaths{
   constructor(el){
     this.el = parseElement(el);
     this.el.innerHTML = ''
+    this.el.setAttribute('preserveAspectRatio','xMaxYMax meet')
+    
     this.path_b = this.el.createChild('path', {
       d: "M1022.9,593.1c-265.2,27.7-500.2,75.6-679.5,138.7C253,763.6,179.1,798.6,124,835.7C64.7,875.5,27.1,918,12.2,961.8C8,974,5.6,986.4,5,998.6",
       fill: 'none',
@@ -192,24 +194,6 @@ class TrainScene{
     }
     this.buildTracks(time - this.last_time)
     this.last_time = time
-  }
-}
-
-function loadSVG(filename, callback){
-  //Create an iframe of the svg file
-  let iframe = document.createElement('iframe');
-  iframe.style.setProperty('display', 'none')
-  iframe.setAttribute('src', filename)
-
-  //Append to the body
-  document.body.appendChild(iframe)
-
-  //When its loaded extract the svg and run the callback
-  iframe.onload = () => {
-    let doc = iframe.contentDocument || iframe.contentWindow.document
-    let svg = doc.children[0]
-    document.body.removeChild(iframe)
-    callback(svg)
   }
 }
 

@@ -170,3 +170,20 @@ class Levels{
     this.snare.style.setProperty('height', `${this.snare_lvl}px`)
   }
 }
+function loadSVG(filename, callback){
+  //Create an iframe of the svg file
+  let iframe = document.createElement('iframe');
+  iframe.style.setProperty('display', 'none')
+  iframe.setAttribute('src', filename)
+
+  //Append to the body
+  document.body.appendChild(iframe)
+
+  //When its loaded extract the svg and run the callback
+  iframe.onload = () => {
+    let doc = iframe.contentDocument || iframe.contentWindow.document
+    let svg = doc.children[0]
+    document.body.removeChild(iframe)
+    callback(svg)
+  }
+}

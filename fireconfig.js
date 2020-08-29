@@ -20,7 +20,7 @@ class FireFriend{
     this.levelref = this.database.ref('/levels')
     this.buttons = {}
     this.mode = null
-    
+
     this.ref.on('value', (sc) => {
       this.mode = sc.val();
       if (this.onmode instanceof Function){
@@ -36,7 +36,7 @@ class FireFriend{
       }
     })
 
-    this.modes = ['ball', 'train', 'ball path', 'levels'];
+    this.modes = ['ball', 'train', 'ball path', 'levels', 'expander'];
   }
 
   setMode(mode){

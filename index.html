@@ -13,6 +13,7 @@
   <script src = "https://emb.galetora.com/vector.js" type="text/javascript"></script>
   <script src = "https://emb.galetora.com/svgPlus.js" type="text/javascript"></script>
   <script src = "./visuals.js" type="text/javascript"></script>
+  <script src = "./expanderShape.js" type="text/javascript"></script>
   <script src = "./ballScene.js" type="text/javascript"></script>
   <script src = "./trainScene.js" type="text/javascript"></script>
   <body>
@@ -51,6 +52,9 @@
         }else if(mode == 'levels'){
           let testScene = new Levels()
           vQueue.appendVScene(testScene);
+        }else if(mode == 'expander'){
+          let expander = new ExpanderShape('svg', './Lamalo Sprites/Fern.svg')
+          vQueue.appendVScene(expander);
         }
       }
     // }
