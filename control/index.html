@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Visuals</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="Visuals" content="Visualize something">
+
+  <script src = "https://emb.galetora.com/svgPlus.js" type="text/javascript"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
+  <script src = "../fireconfig.js" type="text/javascript"></script>
+
+  <body>
+    <div id = "buttons">
+
+    </div>
+    <h3>Bass Level</h3>
+    <div class = "levels bass">
+      <h2 id = "bass_thld">33</h2>
+      <h2 onclick = "fire.incBass_thld(1)">+</h2>
+      <h2 onclick = "fire.incBass_thld(-1)">-</h2>
+    </div>
+    <h3>Snare Level</h3>
+    <div class = "levels snare">
+      <h2 id = "snare_thld">33</h2>
+      <h2 onclick = "fire.incSnare_thld(1)">+</h2>
+      <h2 onclick = "fire.incSnare_thld(-1)">-</h2>
+    </div>
+  </body>
+  <script type = "text/javascript">
+    let fire = new FireFriend();
+    fire.attachThldButtons('bass_thld','snare_thld')
+    fire.attachModeList('buttons')
+  </script>
+  <style type = "text/css">
+    .levels{
+      margin: auto;
+      width: 175px;
+      margin-bottom: 70px;
+    }
+    .bass h2{
+      background: #e91e63;
+    }
+    .snare h2{
+      background: #8bc34a;
+    }
+    .levels > h2{
+      float: left;
+      color: white;
+      border-radius: 30px;
+      line-height: 20px;
+      min-width: 20px;
+      text-align: center;
+      margin: 0px;
+      padding: 10px;
+      margin-right: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    h1 {
+      user-select: none;
+      background: #00b8ff;
+      border-radius: 30px;
+      padding: 0 15px;
+      width: 175px;
+      margin: auto;
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+    h3{
+      width: 175px;
+      margin: auto;
+      margin-bottom: 0px;
+    }
+    body{
+      font-family: sans-serif;
+      margin-top: 100px;
+    }
+    .highlight {
+      border: 2px solid #0494cc;
+    }
+  </style>
+
+</html>

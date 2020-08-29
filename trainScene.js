@@ -1,7 +1,75 @@
+class BallPaths{
+  constructor(el){
+    this.el = parseElement(el);
+    this.el.innerHTML = ''
+    this.path_b = this.el.createChild('path', {
+      d: "M1022.9,593.1c-265.2,27.7-500.2,75.6-679.5,138.7C253,763.6,179.1,798.6,124,835.7C64.7,875.5,27.1,918,12.2,961.8C8,974,5.6,986.4,5,998.6",
+      fill: 'none',
+      stroke: 'none'
+    })
+    this.path_s = this.el.createChild('path', {
+      d: "M1112.4,642c-232.2,26.7-437.5,72.7-593.7,133.2c-77.2,29.9-139.7,62.4-186,96.6c-45.8,33.9-74.4,68.6-85.1,103.1c-2.6,8.6-4.2,17.2-4.5,25.5",
+      fill: 'none',
+      stroke: 'none'
+    })
+    this.el.setAttribute('viewBox','-20 400 1000 600')
+
+    this.sprites = [];
+    this.last_time = null;
+    this.hold_b = false;
+    this.hold_s = false;
+
+  }
+  spawnSprite(path){
+    let ellipse = this.el.createChild('ellipse', {fill: 'white'});
+    let sprite = new Sprite(ellipse, path, {x: 'cx', y: 'cy', sx: 'rx', sy: 'ry'})
+    this.sprites.push(sprite);
+  }
+
+  onBass(std){
+    if (!this.hold_b){
+      this.spawnSprite(this.path_b)
+      this.hold_b = true;
+      setTimeout(() =>{this.hold_b = false}, 150)
+    }
+  }
+  onSnare(std){
+    if (!this.hold_s){
+      this.spawnSprite(this.path_s)
+      this.hold_s = true;
+      setTimeout(() =>{this.hold_s = false}, 50)
+    }
+  }
+
+  removeSprite(sprite){
+    sprite.el.remove()
+    console.log('x');
+    let newSprites = [];
+    this.sprites.forEach((sprite_i) => {
+      if (sprite_i != sprite){
+        newSprites.push(sprite_i)
+      }
+    });
+    this.sprites = newSprites;
+  }
+
+  draw(time){
+    if (this.last_time != null){
+      this.sprites.forEach((sprite) => {
+        if(!sprite.draw(time - this.last_time)){
+          this.removeSprite(sprite)
+        }
+      });
+    }
+    this.last_time = time
+  }
+}
+
 
 class TrainScene{
   constructor(el){
     this.el = parseElement(el);
+    this.el.innerHTML = ''
     this.el.createChild('path', {d: 'M0,0L1000,0L1000,1000L0,1000Z', fill: 'black'})
     loadSVG('./Lamalo Sprites/train.svg', (el) => {
       console.log('x');
@@ -74,7 +142,7 @@ class TrainScene{
   }
 
   onBass(std){
-    if (!this.hold && std > 20){
+    if (!this.hold ){
       this.spawnSprite()
       this.hold = true;
       setTimeout(() =>{this.hold = false}, 200)
@@ -111,6 +179,7 @@ class TrainScene{
       this.sprites.forEach((sprite) => {
         if(!sprite.draw(time - this.last_time)){
           this.removeSprite(sprite)
+          console.log(sprite);
         }
       });
     }
@@ -185,12 +254,19 @@ class Sprites{
 }
 
 class Sprite{
-  constructor(svg, path){
+  constructor(svg, path, keys = null){
     this.el = svg;
     this.path = path;
 
+    this.keys = {
+      x: 'x',
+      y: 'y',
+      sx: 'width',
+      sy: 'height'
+    }
+    this.keys = keys;
 
-    this.r = 200;
+    this.r = 50;
     this.speed = 5;
 
     this.r_i = this.r*0.9;
@@ -220,8 +296,8 @@ class Sprite{
   }
 
   set pos(p){
-    this.el.setAttribute('x', p.x - this.r/2);
-    this.el.setAttribute('y', p.y - this.r);
+    this.el.setAttribute(this.keys.x, p.x - this.r/2);
+    this.el.setAttribute(this.keys.y, p.y - this.r);
   }
   nextPos(dist){
     this.path_pos -= (dist/20)*this.speed;
@@ -234,9 +310,9 @@ class Sprite{
   }
 
   set r(rad){
-    this._r = rad;
-    this.el.setAttribute('width', `${Math.round(rad)}`)
-    this.el.setAttribute('height', `${Math.round(rad)}`)
+    this._r = rad > 0? rad: 0;
+    this.el.setAttribute(this.keys.sx, `${Math.round(rad)}`)
+    this.el.setAttribute(this.keys.sy, `${Math.round(rad)}`)
   }
   get r(){
     return this._r

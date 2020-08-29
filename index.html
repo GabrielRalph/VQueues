@@ -7,42 +7,52 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="Visuals" content="Visualize something">
 
+  <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
+  <script src = "./fireconfig.js" type="text/javascript"></script>
+
   <script src = "https://emb.galetora.com/vector.js" type="text/javascript"></script>
   <script src = "https://emb.galetora.com/svgPlus.js" type="text/javascript"></script>
   <script src = "./visuals.js" type="text/javascript"></script>
   <script src = "./ballScene.js" type="text/javascript"></script>
   <script src = "./trainScene.js" type="text/javascript"></script>
   <body>
+    <svg width = "0" height = "0">
+      <defs>
+        <pattern id="pattern1" height="100%" width="100%" patternContentUnits="objectBoundingBox">
+          <image height="1" width="1" preserveAspectRatio="none" xlink:href="./Lamalo Sprites/world.png" />
+        </pattern>
+      </defs>
+    </svg>
     <svg id = "svg">
     </svg>
   </body>
   <script type = "text/javascript">
-    let mode = 'train'
+    // document.body.onclick = () => {
 
-    let vQueue = new VQueue()
-
-    if (mode == 'train'){
-      let train = new TrainScene('svg')
-      vQueue.appendVScene(train);
-    }else if(mode == 'ball'){
-      let ballbox = new BallBox('svg')
-      let ball = ballbox.createBall({a: new Vector(0, 600), pos: new Vector(500, 500), style: {strokeWidth: 5}, r: 50})
-      ball.style = {fill: '#a363b3', stroke: "#5cad6e"}
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(100, 600), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(200, 600), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(300, 600), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(100, 200), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(200, 200), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(300, 200), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(450, 600), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(400, 700), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(350, 600), style: {strokeWidth: 5}, r: 50})
-      ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(250, 500), style: {strokeWidth: 5}, r: 50})
-      vQueue.appendVScene(ballbox);
-    }else{
-      let testScene = new Levels()
-      vQueue.appendVScene(testScene);
-    }
+      let fire = new FireFriend()
+      let vQueue = new VQueue()
+      fire.onlevels = (levels) => {
+        vQueue.levels = levels
+      }
+      fire.onmode = (mode) => {
+        if (mode == 'train'){
+          let train = new TrainScene('svg')
+          vQueue.appendVScene(train);
+        }else if(mode == 'ball'){
+          let ballbox = new BallBox('svg')
+          for (var i = 0; i < 20; i++){
+            ballbox.createBall({a: new Vector(0, 1234), pos: new Vector(i * 50, 600), style: {strokeWidth: 0, fill: 'url(#pattern1)'}, r: 10 + Math.random()*50})
+          }
+          vQueue.appendVScene(ballbox);
+        }else if(mode == 'ball path'){
+          let ballPath = new BallPaths('svg')
+          vQueue.appendVScene(ballPath);
+        }else{
+          let testScene = new Levels()
+          vQueue.appendVScene(testScene);
+        }
+      }
+    // }
 
 
   </script>
@@ -52,9 +62,13 @@
       min-width: 50px;
       float: left;
       margin: 0px;
+      top: 0px;
+      position: absolute;
+      z-index: 10;
     }
     .bass { background: red;}
-    .snare { background: blue;}
+    .snare { background: blue;
+    left: 50px}
 
     #svg{
       position: fixed;

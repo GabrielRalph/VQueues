@@ -6,9 +6,12 @@ class VQueue{
         this.handleStream(stream)
       });
     }
-    this.bass_specs = [60, 150];
-    this.snare_specs = [2000, 3000];
+    this.bass_specs = [30, 100];
+    this.snare_specs = [1750, 3000];
     this.vScenes = [];
+
+    this.bass_thld = 20;
+    this.snare_thld = 20;
 
     this.last_bass = 0;
     this.last_bass_dir = 0;
@@ -74,7 +77,9 @@ class VQueue{
     let dir = std > this.last_bass;
     this.last_bass = std;
     if (!dir && this.last_bass_dir){
-      this._runVSceneMethod('onBass', std)
+      if (std > this.bass_thld){
+        this._runVSceneMethod('onBass', std)
+      }
     }else{
       // this._runVSceneMethod('onBass', std)
     }
@@ -96,7 +101,9 @@ class VQueue{
     let dir = std > this.last_snare;
     this.last_snare = std;
     if (!dir && this.last_snare_dir){
-      this._runVSceneMethod('onSnare', std)
+      if (std > this.snare_thld){
+        this._runVSceneMethod('onSnare', std)
+      }
     }else{
       // this._runVSceneMethod('onBass', std)
     }
@@ -123,6 +130,11 @@ class VQueue{
       }
     });
     this.vScenes = newVScenes;
+  }
+
+  set levels(l){
+    this.bass_thld = l.bass_thld;
+    this.snare_thld = l.snare_thld;
   }
 }
 

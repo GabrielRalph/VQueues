@@ -41,7 +41,7 @@ class Ball{
   bounce(val){
     if(!this.bouncing){
       if (this.pos.y > 500){
-        this._v.y = -0.1*val*this.a.y
+        this._v.y = -0.05*val*this.a.y
       }
       this.bouncing = true;
       setTimeout(()=>{this.bouncing = false}, 100)
@@ -73,14 +73,17 @@ class Ball{
     if (!(this._style instanceof Object)){
       this._style = {}
     }
-    if (object.stroke){
-      this._style['stroke'] = object.stroke
-    }
-    if (object.fill){
-      this._style['fill'] = object.fill
-    }
-    if (object.strokeWidth){
+    if (object.strokeWidth != undefined){
       this._style['strokeWidth'] = object.strokeWidth
+      if (object.strokeWidth == 0){
+        this._style['stroke'] = 'none'
+      }
+    }
+    if (object.stroke != undefined){
+      this._style['stroke'] = this.strokeWidth > 0 ? object.stroke : 'none'
+    }
+    if (object.fill != undefined){
+      this._style['fill'] = object.fill
     }
     this.el.setProps({
       fill: this.fill,
@@ -188,6 +191,7 @@ class Ball{
 class BallBox{
   constructor(el){
     this.el = parseElement(el)
+    this.el.innerHTML = ''
     window.onresize = () => {
       this.el.setProps({viewBox: `0 0 ${window.innerWidth}, ${window.innerHeight}`})
       let vb = this.el.getViewBox();
@@ -201,6 +205,8 @@ class BallBox{
     this.balls = []
     this.last_tmsp = null
     this.currentBall = 0
+
+    this.hold_s = false;
   }
 
   createBall(options){
@@ -249,21 +255,19 @@ class BallBox{
 
   onBass(std){
     let mode = 'no'
-    if (std > 10){
-      if (mode == 'all'){
+    if (mode == 'all'){
 
-        this.balls.forEach((ball) => {
-          ball.bounce(std)
-        });
-      }else{
+      this.balls.forEach((ball) => {
+        ball.bounce(std)
+      });
+    }else{
 
-        for (var i = 0; i < 5; i++){
-          if(this.balls[this.currentBall]){
-            this.balls[this.currentBall].bounce(std/3)
-            this.currentBall ++;
-            if (this.currentBall >= this.balls.length){
-              this.currentBall = 0;
-            }
+      for (var i = 0; i < 10; i++){
+        if(this.balls[this.currentBall]){
+          this.balls[this.currentBall].bounce(std/3)
+          this.currentBall ++;
+          if (this.currentBall >= this.balls.length){
+            this.currentBall = 0;
           }
         }
       }
@@ -271,14 +275,24 @@ class BallBox{
   }
 
   onSnare(std){
-    if (std > 7){
-      if(this.balls[this.currentBall]){
-        this.balls[this.currentBall].rainbow()
-        this.currentBall ++;
-        if (this.currentBall >= this.balls.length){
-          this.currentBall = 0;
+    if (!this.hold_s){
+      let mode = 'all'
+      if (mode == 'all'){
+        this.balls.forEach((ball) => {
+          ball.rainbow()
+        });
+
+      }else{
+        if(this.balls[this.currentBall]){
+          this.balls[this.currentBall].rainbow()
+          this.currentBall ++;
+          if (this.currentBall >= this.balls.length){
+            this.currentBall = 0;
+          }
         }
       }
+      this.hold_s = true;
+      setTimeout(() => {this.hold_s = false}, 100);
     }
   }
 
