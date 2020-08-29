@@ -17,14 +17,18 @@ class ExpanderShape{
 
   onBass(std){
     if (!this.hold){
-      this.r = std*20;
-      this.hold = true;
-      setTimeout(()=>{this.hold = false}, 100)
+      if (this.r < std*20){
+        this.r = std*20;
+        this.hold = true;
+        setTimeout(()=>{this.hold = false}, 100)
+      }
     }
   }
 
   set r(val){
-    this._r = val > 0?val:0;
+    let max = this.mid.y/1.5
+    this._r = val > 0? ((val > max )? max :val):0;
+
     let offset = new Vector(this._r, this._r);
 
     if (this.mid){
