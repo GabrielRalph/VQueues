@@ -35,6 +35,7 @@
         vQueue.levels = levels
       }
       fire.onmode = (mode) => {
+        vQueue.clearAllVScenes()
         if (mode == 'train'){
           let train = new TrainScene('svg')
           vQueue.appendVScene(train);
@@ -47,7 +48,7 @@
         }else if(mode == 'ball path'){
           let ballPath = new BallPaths('svg')
           vQueue.appendVScene(ballPath);
-        }else{
+        }else if(mode == 'levels'){
           let testScene = new Levels()
           vQueue.appendVScene(testScene);
         }

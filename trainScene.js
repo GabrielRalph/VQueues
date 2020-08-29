@@ -76,26 +76,31 @@ class TrainScene{
       el.setAttribute('height', '1000')
       el.setAttribute('width', '1000')
       this.el.appendChild(el)
+      this.rail = this.el.createChild('path', {
+        d: 'M1110.1,622.1c-469.8,54-832.8,188.9-881.6,346.9c-3.2,10.3-5,20.5-5.4,30.6',
+        fill: 'none',
+        stroke: 'white',
+        'stroke-width': '3'
+      })
     })
-
+    this.rail = create('path', {
+      d: 'M1110.1,622.1c-469.8,54-832.8,188.9-881.6,346.9c-3.2,10.3-5,20.5-5.4,30.6',
+      fill: 'none',
+      stroke: 'white',
+      'stroke-width': '3'
+    })
     this.rails_num = 22;
     this.offset = 1;
     this.tracks = this.el.createChild('g')
     this.track_bars = this.tracks.createChild('g')
     this.back = this.el.createChild('g');
-    this.rail = this.tracks.createChild('path', {
-      d: 'M1110.1,622.1c-469.8,54-832.8,188.9-881.6,346.9c-3.2,10.3-5,20.5-5.4,30.6',
-      fill: 'none',
-      stroke: 'white',
-      'stroke-width': '5'
-    })
+
     this.rail2 = this.tracks.createChild('path', {
       d: "M1025,613C495.3,668.3,86.2,806.5,31.1,968.2c-3.6,10.5-5.6,21-6.1,31.3",
       fill: 'none',
       stroke: 'white',
-      'stroke-width': '5'
+      'stroke-width': '3'
     })
-
     this.path = this.el.createChild('path', {
       d: "M1022.9,593.1c-265.2,27.7-500.2,75.6-679.5,138.7C253,763.6,179.1,798.6,124,835.7C64.7,875.5,27.1,918,12.2,961.8C8,974,5.6,986.4,5,998.6",
       fill: 'none',
@@ -158,6 +163,8 @@ class TrainScene{
         sprite = this.sprites_mgmt.createSprite('random', this.path2)
         this.el.appendChild(sprite.el);
       }
+      sprite.r = 200;
+      sprite.r_i = 200;
       sprite.el.setAttribute('preserveAspectRatio', 'xMidYMax meet')
       this.sprites.push(sprite)
     }
@@ -264,7 +271,9 @@ class Sprite{
       sx: 'width',
       sy: 'height'
     }
-    this.keys = keys;
+    if (keys != null){
+      this.keys = keys;
+    }
 
     this.r = 50;
     this.speed = 5;

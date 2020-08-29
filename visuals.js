@@ -131,6 +131,9 @@ class VQueue{
     });
     this.vScenes = newVScenes;
   }
+  clearAllVScenes(){
+    this.vScenes = []
+  }
 
   set levels(l){
     this.bass_thld = l.bass_thld;
@@ -149,7 +152,10 @@ class Levels{
     document.body.appendChild(this.bass)
     document.body.appendChild(this.snare)
   }
-
+  delete(){
+    document.body.removeChild(this.bass)
+    document.body.removeChild(this.snare)
+  }
   onBass(value){
     this.bass_lvl = value*10;
   }
