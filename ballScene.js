@@ -33,7 +33,7 @@ class Ball{
 
     console.log();
     this.style = {
-      fill: `hsl(${h}, ${s}%, ${l}%)`,
+      fill: `white`,
       stroke: `hsl(${h}, ${s}%, ${l - 20}%)`
     }
   }
